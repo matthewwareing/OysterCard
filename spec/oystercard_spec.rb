@@ -21,13 +21,6 @@ describe Oystercard do
         end
     end
 
-    describe '#deduct' do
-        it 'allows deducting balance' do
-            oystercard.top_up(2)
-            expect { oystercard.deduct(1)}.to change { oystercard.balance }.by -1 
-        end
-    end
-
     describe 'Journeys' do
 
         context 'has not started' do
@@ -42,7 +35,6 @@ describe Oystercard do
             end
             
             it 'touch_in rejected when have less than minimum amount required' do
-                min_balance = Oystercard::MIN_BALANCE_TO_TRAVEL
                 expect { oystercard.touch_in }.to raise_error "Sorry, you don't have enough funds to travel."
             end
 
@@ -65,6 +57,12 @@ describe Oystercard do
             it '#touch_out' do
                 oystercard.touch_out
                 expect(oystercard.in_use).to eq false
+            end
+
+            it 'touch out reduces balance by minimum fare' do
+                oystercard.top_up(10)
+                min_fare = Oystercard::MIN_BALANCE_TO_TRAVEL
+                expect { oystercard.touch_out }.to change{ oystercard.balance }.by(-min_fare)
             end
         end
     end

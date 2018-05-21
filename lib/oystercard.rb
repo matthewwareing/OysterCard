@@ -13,7 +13,7 @@ class Oystercard
         @balance += amount
     end
 
-    def deduct(amount)
+    private def deduct(amount)
         @balance -= amount
     end
 
@@ -30,5 +30,8 @@ class Oystercard
     def touch_out
         fail "You can't touch out before you've touched in!" if in_journey? == false
         @in_use = false
+        deduct(MIN_BALANCE_TO_TRAVEL)
     end
+
+    # private 
 end
