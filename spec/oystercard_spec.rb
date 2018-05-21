@@ -3,7 +3,8 @@ require 'oystercard'
 describe Oystercard do
     subject(:oystercard) { described_class.new }
     let(:entry_station) { double :entry_station }
-    
+    let(:exit_station) { double :exit_station }
+
     describe '#balance' do
         it 'default value is zero' do
             expect(oystercard.balance).to eq 0
@@ -35,7 +36,11 @@ describe Oystercard do
             end
 
             it '#touch_out' do
-                expect {oystercard.touch_out }.to raise_error "You can't touch out before you've touched in!"
+                expect {oystercard.touch_out(exit_station) }.to raise_error "You can't touch out before you've touched in!"
+            end
+
+            it 'has no journeys' do
+                expect(oystercard.all_journeys).to be_empty
             end
         end
 
@@ -63,18 +68,23 @@ describe Oystercard do
             end
 
             it '#touch_out' do
-                oystercard.touch_out
+                oystercard.touch_out(exit_station)
                 expect(oystercard.in_journey?).to eq false
             end
 
             it 'touch out reduces balance by minimum fare' do
                 min_fare = Oystercard::MIN_BALANCE_TO_TRAVEL
-                expect { oystercard.touch_out }.to change{ oystercard.balance }.by(-min_fare)
+                expect { oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-min_fare)
             end
 
             it '#touch_out returns entry_station to nil' do
-                oystercard.touch_out
+                oystercard.touch_out(exit_station)
                 expect(oystercard.entry_station).to eq nil
+            end
+            let(:journey){{entry_station: entry_station, exit_station: exit_station}}
+            it '#touch_out adds a hash to the all_journeys array' do
+                oystercard.touch_out(exit_station)
+                expect(oystercard.all_journeys).to include journey
             end
         end
     end

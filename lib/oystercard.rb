@@ -3,10 +3,12 @@ class Oystercard
     MAX_BALANCE = 90
     MIN_BALANCE_TO_TRAVEL = 1
     attr_reader :balance, :in_use
-    attr_accessor :entry_station
+    attr_accessor :entry_station, :exit_station, :all_journeys
     def initialize
         @balance = DEFAULT_BALANCE
         @entry_station = nil
+        @exit_station = nil
+        @all_journeys = []
     end
     
     def top_up(amount)
@@ -28,9 +30,10 @@ class Oystercard
         @entry_station = entry_station
     end
 
-    def touch_out
+    def touch_out exit_station
         fail "You can't touch out before you've touched in!" if in_journey? == false
         deduct(MIN_BALANCE_TO_TRAVEL)
+        all_journeys << {entry_station: entry_station, exit_station: exit_station }
         @entry_station = nil
     end
 
