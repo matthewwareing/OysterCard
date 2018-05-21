@@ -30,14 +30,20 @@ describe Oystercard do
 
     describe 'Journeys' do
 
-        context 'Journey has not started' do
+        context 'has not started' do
             it '#in_journey?' do
                 expect(oystercard.in_journey?).to eq false
             end
 
             it '#touch_in' do
+                oystercard.top_up(1)
                 oystercard.touch_in
                 expect(oystercard.in_use).to eq true
+            end
+            
+            it 'touch_in rejected when have less than minimum amount required' do
+                min_balance = Oystercard::MIN_BALANCE_TO_TRAVEL
+                expect { oystercard.touch_in }.to raise_error "Sorry, you don't have enough funds to travel."
             end
 
             it '#touch_out' do

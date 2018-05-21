@@ -1,6 +1,7 @@
 class Oystercard
     DEFAULT_BALANCE = 0
     MAX_BALANCE = 90
+    MIN_BALANCE_TO_TRAVEL = 1
     attr_reader :balance, :in_use
     def initialize
         @balance = DEFAULT_BALANCE
@@ -22,6 +23,7 @@ class Oystercard
 
     def touch_in
         fail "You can't touch in before you've touched out!" if in_journey? == true
+        fail "Sorry, you don't have enough funds to travel." if balance < MIN_BALANCE_TO_TRAVEL
         @in_use = true
     end
 
