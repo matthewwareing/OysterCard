@@ -17,6 +17,7 @@ describe Oystercard do
     end
 
     it '#deduct' do
+        oystercard.top_up(20)
         expect { oystercard.deduct(10)}.to change { oystercard.balance }.by -10 
     end
 end
