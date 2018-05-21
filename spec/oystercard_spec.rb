@@ -81,6 +81,7 @@ describe Oystercard do
                 oystercard.touch_out(exit_station)
                 expect(oystercard.entry_station).to eq nil
             end
+            
             let(:journey){{entry_station: entry_station, exit_station: exit_station}}
             it '#touch_out adds a hash to the all_journeys array' do
                 oystercard.touch_out(exit_station)
