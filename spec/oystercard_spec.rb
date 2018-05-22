@@ -43,24 +43,6 @@ describe Oystercard do
                 oystercard.top_up(10)
                 oystercard.touch_in(entry_station)
             end
-
-            it 'touched_in remembers the station' do
-                expect(oystercard.entry_station).to eq entry_station
-            end
-
-
-
-            it 'touch out reduces balance by minimum fare' do
-                min_fare = Oystercard::MIN_BALANCE_TO_TRAVEL
-                expect { oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-min_fare)
-            end
-
-            it '#touch_out returns entry_station to nil' do
-                oystercard.touch_out(exit_station)
-                expect(oystercard.entry_station).to eq nil
-            end
-            
-
         end
     end
 end

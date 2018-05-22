@@ -2,12 +2,12 @@ class Oystercard
     DEFAULT_BALANCE = 0
     MAX_BALANCE = 90
     MIN_BALANCE_TO_TRAVEL = 1
-    attr_reader :balance, :in_use
-    attr_accessor :entry_station, :journeys
+    attr_reader :balance
+    attr_accessor :journeys, :my_journey
     def initialize
         @balance = DEFAULT_BALANCE
-        @entry_station = nil
         @journeys = []
+        @my_journey = Journey.new
     end
     
     def top_up(amount)
@@ -20,16 +20,16 @@ class Oystercard
     end
 
     def touch_in entry_station
-        # fail "You can't touch in before you've touched out!" if in_journey? == true
         fail "Sorry, you don't have enough funds to travel." if balance < MIN_BALANCE_TO_TRAVEL
-        @entry_station = entry_station
-        Journey.new.start(entry_station)
+        
+        my_journey.start(entry_station)
+        
     end
 
     def touch_out exit_station
-        # fail "You can't touch out before you've touched in!" if in_journey? == false
         deduct(MIN_BALANCE_TO_TRAVEL)
-        # journeys.last[:exit_station] = exit_station
-        @entry_station = nil
+        my_journey.finish(exit_station)
+        journeys << my_journey
+        @my_journey = Journey.new
     end
 end
