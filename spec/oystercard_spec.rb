@@ -40,7 +40,7 @@ describe Oystercard do
             end
 
             it 'has no journeys' do
-                expect(oystercard.all_journeys).to be_empty
+                expect(oystercard.journeys).to be_empty
             end
         end
 
@@ -83,9 +83,9 @@ describe Oystercard do
             end
             
             let(:journey){{entry_station: entry_station, exit_station: exit_station}}
-            it '#touch_out adds a hash to the all_journeys array' do
+            it '#touch_out adds a hash to the journeys array' do
                 oystercard.touch_out(exit_station)
-                expect(oystercard.all_journeys).to include journey
+                expect(oystercard.journeys).to include journey
             end
         end
     end
