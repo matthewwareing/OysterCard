@@ -19,21 +19,17 @@ class Oystercard
         @balance -= amount
     end
 
-    def in_journey?
-        !!entry_station
-    end
-
     def touch_in entry_station
-        fail "You can't touch in before you've touched out!" if in_journey? == true
+        # fail "You can't touch in before you've touched out!" if in_journey? == true
         fail "Sorry, you don't have enough funds to travel." if balance < MIN_BALANCE_TO_TRAVEL
         @entry_station = entry_station
-        journeys << {entry_station: entry_station, exit_station: nil }
+        Journey.new.start(entry_station)
     end
 
     def touch_out exit_station
-        fail "You can't touch out before you've touched in!" if in_journey? == false
+        # fail "You can't touch out before you've touched in!" if in_journey? == false
         deduct(MIN_BALANCE_TO_TRAVEL)
-        journeys.last[:exit_station] = exit_station
+        # journeys.last[:exit_station] = exit_station
         @entry_station = nil
     end
 end
