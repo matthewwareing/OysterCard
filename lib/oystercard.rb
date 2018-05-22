@@ -4,10 +4,10 @@ class Oystercard
     MIN_BALANCE_TO_TRAVEL = 1
     attr_reader :balance
     attr_accessor :journeys, :my_journey
-    def initialize
+    def initialize(my_journey: Journey.new)
         @balance = DEFAULT_BALANCE
         @journeys = []
-        @my_journey = Journey.new
+        @my_journey = my_journey
     end
     
     def top_up(amount)
@@ -21,7 +21,6 @@ class Oystercard
 
     def touch_in entry_station
         fail "Sorry, you don't have enough funds to travel." if balance < MIN_BALANCE_TO_TRAVEL
-        
         my_journey.start(entry_station)
         
     end

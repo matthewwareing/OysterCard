@@ -5,28 +5,31 @@ describe Journey do
     let(:entry_station) { double :entry_station }
     let(:exit_station) { double :exit_station }
 
-    it '#in_journey?' do
-        expect(journey.in_journey?).to eq false
+    it "knows if a journey is not complete" do
+        expect(journey).not_to be_finished
     end
 
-    it '#start' do
-        journey.start(entry_station)
-        expect(journey.entry_station).to eq entry_station
+    it 'has a default penalty fare' do
+        expect(journey.fare).to eq Journey::PENALTY_FARE
     end
 
-    it '#finish' do
-        journey.finish(exit_station)
-        expect(journey.exit_station).to eq exit_station
+    context '#start' do
+        before { journey.start(entry_station) }
+
+        it 'entry station' do
+            expect(journey.entry_station).to eq entry_station
+        end
+
+        context '#finish' do
+            before { journey.finish(exit_station) }
+    
+            it 'finishes fare' do
+                expect(journey.exit_station).to eq exit_station
+            end
+    
+            it 'has a minimum fare with a complete journey' do
+                expect(journey.fare).to eq Journey::MIN_FARE
+            end
+        end
     end
 end
-
-
-# it 'touch out reduces balance by minimum fare' do
-#     min_fare = Oystercard::MIN_BALANCE_TO_TRAVEL
-#     expect { oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-min_fare)
-# end
-
-# it '#touch_out returns entry_station to nil' do
-#     oystercard.touch_out(exit_station)
-#     expect(journey.entry_station).to eq nil
-# end
