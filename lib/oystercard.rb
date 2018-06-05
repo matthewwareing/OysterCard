@@ -9,7 +9,7 @@ class Oystercard
         @journeys = []
         @my_journey = my_journey
     end
-    
+
     def top_up(amount)
         fail "You can't top up more than £#{MAX_BALANCE}" if balance + amount > MAX_BALANCE
         @balance += amount
@@ -21,8 +21,7 @@ class Oystercard
 
     def touch_in entry_station
         fail "Sorry, you don't have enough funds to travel." if balance < MIN_BALANCE_TO_TRAVEL
-        my_journey.start(entry_station)
-        
+        @my_journey.start(entry_station)
     end
 
     def touch_out exit_station
